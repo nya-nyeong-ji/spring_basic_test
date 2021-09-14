@@ -20,5 +20,6 @@ public class TimeEntity {
     private LocalDateTime createDate;
 
     @LastModifiedDate
+    @Column(nullable = false, updatable = false)
     private LocalDateTime modifiedDate;
 }

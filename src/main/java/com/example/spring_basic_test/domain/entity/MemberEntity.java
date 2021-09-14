@@ -20,7 +20,7 @@ public class MemberEntity extends TimeEntity{
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Embedded
     private String email;
 
     @Column(nullable = false)
