@@ -16,15 +16,17 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    @Transactional(readOnly = true)
-    public MemberEntity findById(String id) {
-        Optional<MemberEntity> memberEntity = memberRepository.findById(id);
-        memberEntity.orElseThrow(() -> new MemberNotFoundException(id));
-        return memberEntity.get();
-    }
-
     public MemberEntity create (MemberDto.SignUpReq dto) {
         return memberRepository.save(dto.toEntity());
+    }
+
+    @Transactional(readOnly = true)
+    public MemberEntity findById(String id) {
+        final Optional<MemberEntity> memberEntity = memberRepository.findById(id);
+        if (memberEntity == null) {
+            throw new MemberNotFoundException(id);
+        }
+        return memberEntity.get();
     }
 
     public MemberEntity updateMember (String id, MemberDto.MemberReq dto) {

@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("members")
 @RequiredArgsConstructor
@@ -17,7 +15,7 @@ public class MemberController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public MemberDto.Res signUp(@RequestBody @Valid final MemberDto.SignUpReq dto) {
+    public MemberDto.Res signUp(@RequestBody final MemberDto.SignUpReq dto) {
         return new MemberDto.Res(memberService.create(dto));
     }
 
