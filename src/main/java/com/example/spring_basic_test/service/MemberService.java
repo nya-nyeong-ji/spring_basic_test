@@ -3,7 +3,7 @@ package com.example.spring_basic_test.service;
 import com.example.spring_basic_test.domain.entity.MemberEntity;
 import com.example.spring_basic_test.domain.repository.MemberRepository;
 import com.example.spring_basic_test.dto.MemberDto;
-import com.example.spring_basic_test.error.MemberNotFoundException;
+import com.example.spring_basic_test.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,13 +6,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class MemberDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SignUpReq {
+        @NotEmpty
         private String id;
+        @NotEmpty
         private String nickname;
+        @Email
         private String email;
+        @NotEmpty
         private String password;
 
         @Builder
@@ -36,8 +43,11 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MemberReq {
+        @NotEmpty
         private String nickname;
+        @Email
         private String email;
+        @NotEmpty
         private String password;
 
         @Builder
@@ -50,9 +60,13 @@ public class MemberDto {
 
     @Getter
     public static class Res {
+        @NotEmpty
         private String id;
+        @NotEmpty
         private String nickname;
+        @Email
         private String email;
+        @NotEmpty
         private String password;
 
         public Res(MemberEntity me) {
