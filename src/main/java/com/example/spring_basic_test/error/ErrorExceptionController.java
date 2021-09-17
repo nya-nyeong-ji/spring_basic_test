@@ -1,5 +1,6 @@
 package com.example.spring_basic_test.error;
 
+import com.example.spring_basic_test.exception.EmailDuplicationException;
 import com.example.spring_basic_test.exception.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,13 @@ public class ErrorExceptionController {
     protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
         return buildFieldErrors(ErrorCode.INPUT_INVALID, fieldErrors);
+    }
+
+    @ExceptionHandler(EmailDuplicationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleConstraintViolateException(EmailDuplicationException e) {
+        final ErrorCode errorCode = ErrorCode.EMAIL_DUPLICATION;
+        return buildError(errorCode);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors (BindingResult bindingResult) {

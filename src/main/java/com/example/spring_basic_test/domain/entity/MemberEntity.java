@@ -1,5 +1,6 @@
 package com.example.spring_basic_test.domain.entity;
 
+import com.example.spring_basic_test.domain.model.Email;
 import com.example.spring_basic_test.dto.MemberDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,14 +21,14 @@ public class MemberEntity extends TimeEntity{
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private String email;
+    @Embedded
+    private Email email;
 
     @Column(nullable = false)
     private String password;
 
     @Builder
-    public MemberEntity(String id, String nickname, String email, String password) {
+    public MemberEntity(String id, String nickname, Email email, String password) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
