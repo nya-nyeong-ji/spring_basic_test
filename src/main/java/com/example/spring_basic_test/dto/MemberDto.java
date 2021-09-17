@@ -1,12 +1,13 @@
 package com.example.spring_basic_test.dto;
 
 import com.example.spring_basic_test.domain.entity.MemberEntity;
+import com.example.spring_basic_test.domain.model.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 public class MemberDto {
@@ -17,13 +18,13 @@ public class MemberDto {
         private String id;
         @NotEmpty
         private String nickname;
-        @Email
-        private String email;
+        @Valid
+        private Email email;
         @NotEmpty
         private String password;
 
         @Builder
-        public SignUpReq(String id, String nickname, String email, String password) {
+        public SignUpReq(String id, String nickname, Email email, String password) {
             this.id = id;
             this.nickname = nickname;
             this.email = email;
@@ -43,15 +44,12 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MemberReq {
-        @NotEmpty
         private String nickname;
-        @Email
-        private String email;
-        @NotEmpty
+        private Email email;
         private String password;
 
         @Builder
-        public MemberReq(String nickname, String email, String password) {
+        public MemberReq(String nickname, Email email, String password) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
@@ -60,13 +58,9 @@ public class MemberDto {
 
     @Getter
     public static class Res {
-        @NotEmpty
         private String id;
-        @NotEmpty
         private String nickname;
-        @Email
-        private String email;
-        @NotEmpty
+        private Email email;
         private String password;
 
         public Res(MemberEntity me) {

@@ -29,7 +29,7 @@ public class MemberController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public MemberDto.Res updateMember(@PathVariable final String id, @RequestBody MemberDto.MemberReq dto) {
+    public MemberDto.Res updateMember(@PathVariable final String id, @RequestBody final MemberDto.MemberReq dto) {
         return new MemberDto.Res(memberService.updateMember(id, dto));
     }
 }
