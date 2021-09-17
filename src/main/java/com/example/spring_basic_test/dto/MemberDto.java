@@ -2,6 +2,7 @@ package com.example.spring_basic_test.dto;
 
 import com.example.spring_basic_test.domain.entity.MemberEntity;
 import com.example.spring_basic_test.domain.model.Email;
+import com.example.spring_basic_test.domain.model.Password;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class MemberDto {
                     .id(id)
                     .nickname(nickname)
                     .email(email)
-                    .password(password)
+                    .password(Password.builder().value(password).build())
                     .build();
         }
     }
@@ -46,10 +47,10 @@ public class MemberDto {
     public static class MemberReq {
         private String nickname;
         private Email email;
-        private String password;
+        private Password password;
 
         @Builder
-        public MemberReq(String nickname, Email email, String password) {
+        public MemberReq(String nickname, Email email, Password password) {
             this.nickname = nickname;
             this.email = email;
             this.password = password;
@@ -61,7 +62,7 @@ public class MemberDto {
         private String id;
         private String nickname;
         private Email email;
-        private String password;
+        private Password password;
 
         public Res(MemberEntity me) {
             this.id = me.getId();
