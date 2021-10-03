@@ -1,5 +1,6 @@
 package com.example.spring_basic_test.controller;
 
+import com.example.spring_basic_test.domain.model.Email;
 import com.example.spring_basic_test.dto.MemberDto;
 import com.example.spring_basic_test.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,12 @@ public class MemberController {
     @ResponseStatus(value = HttpStatus.OK)
     public MemberDto.Res getMember(@PathVariable final String id) {
         return new MemberDto.Res(memberService.findById(id));
+    }
+
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public MemberDto.Res getMemberByEmail(@Valid Email email) {
+        return new MemberDto.Res(memberService.findByEmail(email));
     }
 
     @PutMapping(value = "/{id}")

@@ -34,6 +34,12 @@ public class MemberService {
         return memberEntity.get();
     }
 
+    public MemberEntity findByEmail(Email email) {
+        final MemberEntity memberEntity = memberRepository.findByEmail(email);
+        if (memberEntity == null) throw new MemberNotFoundException(email);
+        return memberEntity;
+    }
+
     public MemberEntity updateMember (String id, MemberDto.MemberReq dto) {
         final MemberEntity memberEntity = findById(id);
         memberEntity.updateMember(dto);
