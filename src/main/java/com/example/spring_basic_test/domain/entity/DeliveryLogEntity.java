@@ -2,6 +2,7 @@ package com.example.spring_basic_test.domain.entity;
 
 import com.example.spring_basic_test.domain.model.DeliveryStatus;
 import com.example.spring_basic_test.exception.DeliveryAlreadyDeliveringException;
+import com.example.spring_basic_test.exception.DeliveryStatusEqualsException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,12 +18,15 @@ import javax.persistence.*;
 public class DeliveryLogEntity extends TimeEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, updatable = false)
     private DeliveryStatus status;
+
+    @Transient
+    private DeliveryStatus lastStatus;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne
@@ -31,8 +35,22 @@ public class DeliveryLogEntity extends TimeEntity{
 
     @Builder
     public DeliveryLogEntity(DeliveryStatus status, DeliveryEntity delivery) {
-        this.status = status;
+        verifyStatus(status, delivery);
+        setStatus(status);
         this.delivery = delivery;
+    }
+
+    private void verifyStatus(DeliveryStatus status, DeliveryEntity delivery) {
+        if (!delivery.getLogs().isEmpty()) {
+            lastStatus = getLastStatus(delivery);
+            verifyLastStatusEquals(status);
+            verifyAlreadyCompleted();
+        }
+    }
+
+    private DeliveryStatus getLastStatus(DeliveryEntity delivery) {
+        final int lastIndex = delivery.getLogs().size() - 1;
+        return delivery.getLogs().get(lastIndex).getStatus();
     }
 
     private void setStatus(final DeliveryStatus status) {
@@ -49,6 +67,8 @@ public class DeliveryLogEntity extends TimeEntity{
             case DELIVERING:
                 delivering();
                 break;
+            default:
+                throw new IllegalStateException(status.name() + "is not found");
         }
     }
 
@@ -74,5 +94,19 @@ public class DeliveryLogEntity extends TimeEntity{
 
     private boolean isNotYetDelivering() {
         return status != DeliveryStatus.PENDING;
+    }
+
+    private void verifyAlreadyCompleted() {
+        if (isCompleted()) {
+            throw new IllegalStateException("It has already been completed and can not be changed.");
+        }
+    }
+
+    private void verifyLastStatusEquals(DeliveryStatus status) {
+        if (lastStatus == status) throw new DeliveryStatusEqualsException(lastStatus);
+    }
+
+    private boolean isCompleted() {
+        return lastStatus == DeliveryStatus.COMPLETED;
     }
 }

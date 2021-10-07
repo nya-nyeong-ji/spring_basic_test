@@ -35,4 +35,14 @@ public class DeliveryService {
         if (delivery == null) throw new DeliveryNoFoundException(id);
         return delivery.get();
     }
+
+    public DeliveryEntity removeLogs(long id) {
+        final DeliveryEntity delivery = findById(id);
+        delivery.getLogs().clear();
+        return delivery;
+    }
+
+    public void remove(long id) {
+        deliveryRepository.deleteById(id);
+    }
 }
