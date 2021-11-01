@@ -7,6 +7,8 @@ import com.example.spring_basic_test.dto.MemberDto;
 import com.example.spring_basic_test.exception.EmailDuplicationException;
 import com.example.spring_basic_test.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +30,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberEntity findById(String id) {
         final Optional<MemberEntity> memberEntity = memberRepository.findById(id);
-        if (memberEntity == null) {
-            throw new MemberNotFoundException(id);
-        }
+        memberEntity.orElseThrow(() -> new MemberNotFoundException(id));
         return memberEntity.get();
     }
 
+    @Transactional(readOnly = true)
     public MemberEntity findByEmail(Email email) {
         final MemberEntity memberEntity = memberRepository.findByEmail(email);
         if (memberEntity == null) throw new MemberNotFoundException(email);
@@ -44,6 +45,11 @@ public class MemberService {
         final MemberEntity memberEntity = findById(id);
         memberEntity.updateMember(dto);
         return memberEntity;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MemberEntity> findALL(Pageable pageable) {
+        return memberRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

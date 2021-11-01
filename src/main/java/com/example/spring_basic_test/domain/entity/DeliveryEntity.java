@@ -3,7 +3,6 @@ package com.example.spring_basic_test.domain.entity;
 import com.example.spring_basic_test.domain.model.Address;
 import com.example.spring_basic_test.domain.model.DeliveryStatus;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.util.ArrayList;

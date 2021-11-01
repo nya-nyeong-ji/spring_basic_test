@@ -1,9 +1,13 @@
 package com.example.spring_basic_test.controller;
 
+import com.example.spring_basic_test.domain.entity.MemberEntity;
 import com.example.spring_basic_test.domain.model.Email;
+import com.example.spring_basic_test.domain.model.PageRequest;
 import com.example.spring_basic_test.dto.MemberDto;
 import com.example.spring_basic_test.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +42,10 @@ public class MemberController {
     @ResponseStatus(value = HttpStatus.OK)
     public MemberDto.Res updateMember(@PathVariable final String id, @RequestBody final MemberDto.MemberReq dto) {
         return new MemberDto.Res(memberService.updateMember(id, dto));
+    }
+
+    @GetMapping(value = "/page")
+    public Page<MemberDto.Res> getMembers(final PageRequest pageable) {
+        return memberService.findALL(pageable.of()).map(MemberDto.Res::new);
     }
 }
