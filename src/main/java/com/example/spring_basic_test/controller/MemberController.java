@@ -1,9 +1,10 @@
 package com.example.spring_basic_test.controller;
 
-import com.example.spring_basic_test.domain.entity.MemberEntity;
 import com.example.spring_basic_test.domain.model.Email;
 import com.example.spring_basic_test.domain.model.PageRequest;
 import com.example.spring_basic_test.dto.MemberDto;
+import com.example.spring_basic_test.service.MemberSearchService;
+import com.example.spring_basic_test.service.MemberSearchType;
 import com.example.spring_basic_test.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberSearchService memberSearchService;
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -44,8 +46,17 @@ public class MemberController {
         return new MemberDto.Res(memberService.updateMember(id, dto));
     }
 
+    //step-12 코드
+//    @GetMapping(value = "/page")
+//    public Page<MemberDto.Res> getMembers(final PageRequest pageable) {
+//        return memberService.findALL(pageable.of()).map(MemberDto.Res::new);
+//    }
+
     @GetMapping(value = "/page")
-    public Page<MemberDto.Res> getMembers(final PageRequest pageable) {
-        return memberService.findALL(pageable.of()).map(MemberDto.Res::new);
+    public Page<MemberDto.Res> getMembers(
+            @RequestParam(name = "type") final MemberSearchType type,
+            @RequestParam(name = "value", required = false) final String value,
+            final PageRequest pageable) {
+        return memberSearchService.search(type, value, pageable.of()).map(MemberDto.Res::new);
     }
 }
